@@ -45,16 +45,22 @@ slider_smooth = Slider(start=0, end=10, step=0.2, value=0, title="smoothness", c
 # slider_knots = Slider(start=1, end=20, step=1, value=3, title="knots")
 select_degree = Select(title="Curve order:", value="3", options=[("1","Linear (1 degree)"), ("2","Quadratic (2 degrees)"), ("3","Cubic (3 degrees)"), ("4","Quartic (4 degrees)"), ("5","Quintic (5 degrees)")])
 
+# Basic instructions
+div_instr = Div(text="<font color=black>Click to add/delete a point or drag it around. \
+<br> <font color=red>The red line </font> is the spline. \
+<br> <font color=blue>The blue line </font> is just a sinusoid curve that can be used as a guide. \
+<br> <font color=green>The vertical green dashed lines </font> are the knots.</font>", width=600, height=100)
+
 # Show a warning when (number of datapoints) < (order of curve + 1)
-div = Div(text="<font color=black>This spline requires at least 4 points</font>", width=400, height=100)
-def update_div(attr, old, new):
+div_note = Div(text="<font color=black>This spline requires at least 4 points</font>", width=400, height=100)
+def update_div_note(attr, old, new):
     min_points = int(select_degree.value)+1
     color="black"
     extra = ""
     if min_points>len(source_datapoints.data['x']):
         color="red"
         extra = ", please add "+ str(min_points-len(source_datapoints.data['x'])) +" more!"
-    div.text="<font color="+color+">This spline requires at least "+str(min_points)+" points" +extra+"</font>"
+    div_note.text="<font color="+color+">This spline requires at least "+str(min_points)+" points" +extra+"</font>"
 
 
 def update_source_spline(attr, old, new):
@@ -159,12 +165,12 @@ def display_event():
 for event in ['tap', 'pan','panstart', 'panend']:
     p.js_on_event(event,display_event())
 
-source_datapoints.on_change('data', update_div)
+source_datapoints.on_change('data', update_div_note)
 source_datapoints.on_change('data', update_source_spline)
 
-select_degree.on_change('value', update_div)
+select_degree.on_change('value', update_div_note)
 select_degree.on_change('value', update_source_spline)
 
 # slider_knots.on_change('value', update_source_spline)
 
-curdoc().add_root(column(p, slider_smooth, select_degree, div))
+curdoc().add_root(column(div_instr, p, slider_smooth, select_degree, div_note))
