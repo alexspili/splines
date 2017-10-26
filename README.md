@@ -9,4 +9,4 @@ The vertical green dashed lines are the knots.
 
 [![splines](https://github.com/alexspili/splines/blob/master/Screenshot_splines.png "Splines interpolation")][here]
 
-[here]: http://34.212.227.255:5006
+[here]: http://alexspiliotopoulos.com/aws/splines
